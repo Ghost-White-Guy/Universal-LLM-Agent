@@ -1,4 +1,4 @@
-# 🤖 Universal LLM Agent
+#  Universal LLM Agent
 
 <p align="center">
   <strong>Лёгкий CLI-агент для локальных и облачных LLM с реальным tool calling</strong><br>
