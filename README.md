@@ -476,6 +476,12 @@ Linux/Termux-лаунчер для быстрого старта без лишн
 
 ---
 
+## Помощь
+
+Если вы нашли баги, ошибки или столкнулись с проблемами, пожалуйста, напишите о них на почту byteghosthelper@gmail.com. Желательно прикрепить к письму файл сохранения (сделав /save bug), чтобы я мог просмотреть сессию и понять, в какой именно момент появилась проблема. Также, пожалуйста, добавьте текстовое описание самой ошибки.
+
+---
+
 # 🇺🇸 English Version
 
 ## What it is
@@ -949,3 +955,9 @@ Because it is not a marketing label. It is a real technical boundary: guardrails
 - local memory;
 - Windows / Linux / Termux;
 - transparent and extensible.
+
+---
+
+## Help
+
+If you find any bugs, errors, or encounter any issues, please report them to byteghosthelper@gmail.com. It is highly recommended to attach a save file (created with the /save bug command) to your email, so I can review the session and pinpoint exactly when the problem occurred. Please also include a detailed text description of the error itself.
