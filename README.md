@@ -970,7 +970,7 @@ Because it is not a marketing label. It is a real technical boundary: guardrails
 
 # Thanks for your help
 <div align="center">
-  <a href="https://github.com/geme325" title="QA-тестер: Поиск багов и проверка на прочность">
+  <a href="https://github.com/geme325" title="QA Tester: Bug Finding and Strength Testing">
     <img src="https://wsrv.nl/?url=github.com/geme325.png&w=60&h=60&fit=cover&mask=circle" width="60" alt="geme325"/>
     <br />
     <sub><b>geme325</b></sub>
