@@ -967,7 +967,6 @@ Because it is not a marketing label. It is a real technical boundary: guardrails
 - transparent and extensible.
 
 ---
----
 
 # Thanks for your help
 <div align="center">
