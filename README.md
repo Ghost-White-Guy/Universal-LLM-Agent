@@ -208,7 +208,7 @@ chmod +x start_API.sh
 | `/load <file>` | Загрузить сессию |
 | `/system` | Просмотр или редактирование системного промпта |
 | `/workspace <dir>` | Сменить рабочую директорию агента |
-| `/mode <auto|native|prompt>` | Принудительно переключить режим tool calling |
+| `/mode <auto/native/prompt>` | Принудительно переключить режим tool calling |
 | `/profile` | Изменить API-профиль |
 | `/info` | Показать системную информацию |
 | `/exit` | Выйти |
