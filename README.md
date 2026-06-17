@@ -473,6 +473,16 @@ Linux/Termux-лаунчер для быстрого старта без лишн
 - локальная память;
 - Windows / Linux / Termux;
 - прозрачность и расширяемость.
+---
+
+# Благадарность за помошь
+<div align="center">
+  <a href="https://github.com/geme325" title="QA-тестер: Поиск багов и проверка на прочность">
+    <img src="https://wsrv.nl/?url=github.com/geme325.png&w=60&h=60&fit=cover&mask=circle" width="60" alt="geme325"/>
+    <br />
+    <sub><b>geme325</b></sub>
+  </a>
+</div>
 
 ---
 
@@ -955,6 +965,18 @@ Because it is not a marketing label. It is a real technical boundary: guardrails
 - local memory;
 - Windows / Linux / Termux;
 - transparent and extensible.
+
+---
+---
+
+# Thanks for your help
+<div align="center">
+  <a href="https://github.com/geme325" title="QA-тестер: Поиск багов и проверка на прочность">
+    <img src="https://wsrv.nl/?url=github.com/geme325.png&w=60&h=60&fit=cover&mask=circle" width="60" alt="geme325"/>
+    <br />
+    <sub><b>geme325</b></sub>
+  </a>
+</div>
 
 ---
 
