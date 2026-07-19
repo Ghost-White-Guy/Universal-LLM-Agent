@@ -1,15 +1,17 @@
 #  Universal LLM Agent
 
 <p align="center">
-  <strong>Лёгкий CLI-агент для локальных и облачных LLM с реальным tool calling</strong><br>
-  Один Python-файл • Минимум зависимостей • Native + prompt-based режимы • Windows / Linux / Termux
+  <strong>Лёгкий CLI + TUI агент для локальных и облачных LLM с реальным tool calling</strong><br>
+  Один Python-файл • Минимум зависимостей • Native + prompt-based режимы • Windows / Linux / Termux • Красивый TUI на Textual
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge" alt="Python 3.8+">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/Version-2.0-purple?style=for-the-badge" alt="Version 2.0">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Termux-success?style=for-the-badge" alt="Platform">
-  <img src="https://img.shields.io/badge/Tools-76-orange?style=for-the-badge" alt="Tools">
-  <img src="https://img.shields.io/badge/Core-Single%20file-purple?style=for-the-badge" alt="Single file">
+  <img src="https://img.shields.io/badge/Tools-100%2B-orange?style=for-the-badge" alt="Tools">
+  <img src="https://img.shields.io/badge/Core-Single%20file-cyan?style=for-the-badge" alt="Single file">
+  <img src="https://img.shields.io/badge/TUI-Textual-9cf?style=for-the-badge" alt="TUI">
 </p>
 
 <p align="center">
@@ -24,19 +26,28 @@
 
 ---
 
+Universal LLM Agent возник просто потому, что мне был нужен именно такой агент. В нём хватает косяков, странностей и экспериментальных решений, но это мой личный проект. Если он окажется полезен не только мне, значит всё это было не зря.
+
+---
+
 # 🇷🇺 Русская версия
 
 ## Что это такое
 
-Universal LLM Agent — это CLI-агент, который подключает языковую модель к инструментам операционной системы, файлам, сети, памяти и части desktop-автоматизации. Модель не просто отвечает текстом, а может вызывать функции через единый слой инструментов.
+Universal LLM Agent — это CLI/TUI-агент, который подключает языковую модель к инструментам операционной системы, файлам, сети, памяти, desktop-автоматизации, Docker-песочнице, мессенджерам (Telegram) и планировщикам задач.
 
-Главная особенность проекта в том, что он умеет работать в двух мирах одновременно:
+В версии **2.0** (файл `AI-agent.py`) ядро прежнего консольного агента (`local_agent.py`) объединено с графическим TUI на библиотеке [Textual](https://textual.textualize.io/). Это один Python-файл, который можно запустить в двух интерфейсах:
+- **TUI** — полноэкранный интерфейс с чатом, сайдбаром, анимациями звёздного неба и плавным появлением сообщений;
+- **Console** — классический REPL, работающий только на стандартной библиотеке Python 3.11+.
 
-- с моделями, у которых уже есть нативный `tools` API;
-- с моделями, у которых инструментов нет вовсе, но их можно аккуратно “научить” через prompt-based режим.
+Модель не просто отвечает текстом — она вызывает функции через единый слой инструментов (более 100 штук).
+
+Главная особенность проекта: он умеет работать в двух мирах одновременно:
+- с моделями, у которых уже есть нативный `tools` API (OpenAI-совместимый);
+- с моделями, у которых инструментов нет вовсе, но их можно аккуратно "научить" через prompt-based режим (Hermes-style `<tool_call>`).
 
 > [!NOTE]
-> Разделы README здесь написаны честно: где возможности уже уверенные, там сказано прямо; где поведение ещё экспериментальное, это тоже отмечено явно.
+> README написан честно: где возможности уверенные — сказано прямо; где поведение экспериментальное — отмечено явно.
 
 ---
 
@@ -59,14 +70,14 @@ Universal LLM Agent — это CLI-агент, который подключае
 
 Ядро проекта намеренно остаётся простым:
 
-- один Python-файл;
-- только стандартная библиотека в самом ядре;
-- прозрачный реестр инструментов;
-- понятный REPL;
+- один Python-файл (`AI-agent.py`);
+- только стандартная библиотека в самом ядре (консольный режим не требует pip-пакетов);
+- прозрачный реестр инструментов (`ToolRegistry`);
+- понятный REPL + красивый TUI;
 - локальные конфиги без лишнего сервиса;
 - поддержка локальных и облачных backend’ов.
 
-Это не попытка собрать “магический AGI-оркестр”. Это практичный агентный runtime: его можно открыть, прочитать, изменить и запустить без лишней инфраструктуры.
+Это не попытка собрать "магический AGI-оркестр". Это практичный агентный runtime: его можно открыть, прочитать, изменить и запустить без лишней инфраструктуры.
 
 ---
 
@@ -74,14 +85,33 @@ Universal LLM Agent — это CLI-агент, который подключае
 
 Агент умеет:
 
-- стримить ответ модели по мере генерации;
-- отдельно показывать reasoning/thinking;
+- стримить ответ модели по мере генерации (текст + reasoning/thinking);
+- отдельно показывать рассуждения модели;
 - собирать tool calls из стрима и из обычного текста;
 - переключаться между native и prompt tool calling;
-- выполнять несколько независимых вызовов параллельно;
-- хранить заметки, todo и KV-данные между сессиями;
+- выполнять несколько независимых вызовов параллельно (`<tools_call>` + `ThreadPoolExecutor`);
+- хранить заметки, todo, KV-данные и блочный блокнот между сессиями;
 - работать с файлами, shell, Python, HTTP, Git, system tools и Windows desktop;
-- выдавать понятный цветной CLI-вывод.
+- запускать опасные эксперименты в изолированном Docker-контейнере (`sandbox_run`);
+- принимать сообщения из Telegram и отвечать в Telegram / Discord;
+- запрашивать "второе мнение" у той же LLM через `ask_helper` (роли: critic, planner, interpreter, reviewer, creative, roleplayer);
+- выдавать понятный цветной CLI-вывод или красивый TUI с анимациями.
+
+---
+
+## Режимы запуска
+
+```bash
+python AI-agent.py            # TUI (Textual) — режим по умолчанию
+python AI-agent.py --console  # Консольный REPL-режим
+python AI-agent.py --console --backend ollama   # Консоль + пресет бэкенда
+python AI-agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
+```
+
+| Режим | Зависимости | Назначение |
+|---|---|---|
+| TUI | `textual`, `rich`, `pyperclip` (опц.), `psutil`, `win10toast` (опц.), `Pillow` | Полноэкранный интерфейс с чатом, сайдбаром, автодополнением команд |
+| Console | Только stdlib Python 3.11+ | Классический REPL, минимальные требования к окружению |
 
 ---
 
@@ -89,49 +119,47 @@ Universal LLM Agent — это CLI-агент, который подключае
 
 ```mermaid
 flowchart TD
-    U[Пользователь] --> R[CLI REPL]
+    U[Пользователь] --> R[CLI REPL или TUI]
     R --> P[Системный промпт / схема инструментов]
     P --> L[LLM backend]
     L -->|content / reasoning / tool_calls| R
     R --> T[Tool registry]
-    T --> F[Файлы]
-    T --> S[Shell / Python]
-    T --> W[Web / HTTP]
-    T --> M[Memory / todo / kv]
+    T --> F[Файлы и диск]
+    T --> S[Shell / Python / Docker]
+    T --> W[Web / HTTP / Telegram]
+    T --> M[Memory / todo / kv / notebook]
     T --> D[Desktop / Windows]
     T --> G[Git / system / data]
 ```
 
-### Режимы работы
+### Режимы tool calling
 
 - `native` — агент передаёт инструменты через OpenAI-совместимый `tools` API;
 - `prompt` — агент подсовывает модели Hermes-style инструкции с `<tool_call>`;
 - `auto` — агент пробует native, а если backend не поддерживает инструменты, переходит на prompt-fallback.
 
 > [!TIP]
-> Для моделей вроде Ollama, LM Studio и vLLM удобнее native-режим. Для llama.cpp и KoboldCpp обычно полезнее prompt-режим.
+> Для Ollama, LM Studio и vLLM удобнее native-режим. Для KoboldCpp / llama.cpp — prompt-режим.
 
 ### Что именно парсится
 
-Из кода видно, что агент умеет:
-
-- стримить `content`;
-- стримить `reasoning_content`;
+Агент умеет:
+- стримить `content` и `reasoning_content`;
 - собирать `tool_calls` по кускам из SSE/стрима;
-- разбирать `<think>...</think>`;
+- разбирать `<think>...</think>` и жёстко скрывать их от пользователя;
 - разбирать `<tool_call>...</tool_call>`;
 - разбирать `<tools_call>...</tools_call>` для параллельных вызовов;
-- извлекать инструмент даже из “сырого” JSON, если модель написала его без тега.
+- извлекать инструмент даже из "сырого" JSON, если модель написала его без тега.
 
 ---
 
 ## Поддерживаемые backend’ы
 
-| Backend | Native tools | Базовый URL | Комментарий |
+| Backend | Native tools | Base URL | Комментарий |
 |---|---:|---|---|
 | Ollama | Да | `http://localhost:11434/v1` | `ollama serve` + `ollama pull <model>` |
 | LM Studio | Да | `http://localhost:1234/v1` | Включить Local Server на 1234 |
-| vLLM | Да | `http://localhost:8000/v1` | Подходит для tool-calling |
+| vLLM | Да | `http://localhost:8000/v1` | `--tool-call-parser hermes` |
 | OpenAI | Да | `https://api.openai.com/v1` | Нужен `OPENAI_API_KEY` |
 | OpenRouter | Да | custom | Любой OpenAI-compatible endpoint |
 | Groq | Да | `https://api.groq.com/openai/v1` | Нужен `GROQ_API_KEY` |
@@ -149,33 +177,59 @@ flowchart TD
 Запускать нужно через:
 
 ```bat
-start_API.bat
+Start.bat
 ```
 
 Лаунчер делает следующее:
-
 - проверяет, установлен ли Python;
-- при необходимости скачивает Python 3.11.8;
-- добавляет Python в PATH для текущей сессии;
-- ставит `psutil`, `win10toast`, `Pillow`;
-- открывает меню запуска агента.
+- при необходимости скачивает Python 3.11.9 и ставит с PrependPath=1;
+- ставит `textual rich pyperclip psutil win10toast Pillow`;
+- автодетектит бэкенд через `netstat`;
+- открывает меню запуска агента (TUI / Console / Exit).
 
 ### Linux / Termux
 
+<details open>
+<summary><strong>🐧 Готового лаунчера нет — агент запускается вручную из терминала</strong></summary>
+
+#### 1. Убедитесь, что установлен Python 3.11+
+
 ```bash
-chmod +x start_API.sh
-./start_API.sh
+python --version
 ```
 
-Лаунчер:
+2. Установите системные зависимости
+Они нужны для Pillow и корректной работы Textual.
 
-- проверяет наличие `python3`;
-- обновляет `pip`;
-- устанавливает `psutil` и `Pillow`;
-- запускает `local_agent.py`.
+Debian / Ubuntu
+
+```bash
+sudo apt update
+sudo apt install python-pip 
+```
+
+Termux
+
+```bash
+pkg install python python-pip 
+```
+
+3. Установите Python-зависимости для TUI
+
+```bash
+pip install textual rich pyperclip psutil Pillow
+```
+
+4. Запустите агента
+
+```bash
+python AI-agent.py            # TUI (по умолчанию)
+python AI-agent.py --console  # Консольный режим
+```
+</details>
 
 > [!NOTE]
-> Лаунчеры сделаны специально простыми. Их задача — быстро поднять среду, а не спрятать всё за сложной обвязкой.
+> Для чисто консольного режима (`--console`) зависимости не нужны — только stdlib.
 
 ---
 
@@ -185,19 +239,20 @@ chmod +x start_API.sh
 
 | Файл | Назначение |
 |---|---|
-| `~/.local_agent_user.json` | API key, base URL, model, профиль |
-| `~/.local_agent_prompt.json` | Сохранённый системный промпт |
-| `~/.local_agent_memory.json` | Локальная память |
-| `~/.local_agent_kv.sqlite` | KV-хранилище |
-| `~/.local_agent_todos.json` | Список задач |
+| `~/.local_agent_user.json` | API key, base URL, model, имя пользователя/агента, Telegram/Discord |
+| `~/.local_agent_prompt.json` | Сохранённый системный промпт (с версией `AGENT_VERSION`) |
+| `~/.local_agent_memory.json` | Локальная память (`memory`) |
+| `~/.local_agent_kv.sqlite` | KV-хранилище на SQLite |
+| `~/.local_agent_notebook.md` | Блочный блокнот долгосрочной памяти |
+| `~/.mimo_tui_session.json` | История TUI-сессии |
 
 ### Важная деталь про пути
 
-Пути разрешаются относительно `AGENT_WORKSPACE`, если путь относительный. Абсолютные пути тоже возможны. Это удобно, но это не “жёсткая песочница”. Для README это важно писать честно: агент помогает работать с файлами, но не закрывает их бронёй от любой ошибки модели.
+Пути разрешаются относительно `AGENT_WORKSPACE`, если путь относительный. Абсолютные пути тоже возможны. Это удобно, но это не "жёсткая песочница". Агент помогает работать с файлами, но не закрывает их бронёй от любой ошибки модели.
 
 ---
 
-## CLI-команды
+## CLI-команды (консольный режим)
 
 | Команда | Что делает |
 |---|---|
@@ -206,12 +261,31 @@ chmod +x start_API.sh
 | `/history [N]` | Показать последние N сообщений |
 | `/save <file>` | Сохранить сессию |
 | `/load <file>` | Загрузить сессию |
-| `/system` | Просмотр или редактирование системного промпта |
-| `/workspace <dir>` | Сменить рабочую директорию агента |
+| `/system [prompt]` | Просмотр или редактирование системного промпта |
+| `/workspace [dir]` | Сменить рабочую директорию агента |
 | `/mode <auto/native/prompt>` | Принудительно переключить режим tool calling |
-| `/profile` | Изменить API-профиль |
-| `/info` | Показать системную информацию |
-| `/exit` | Выйти |
+| `/compact [on/off]` | Компактный промпт (меньше токенов) |
+| `/profile` | Изменить API-профиль (api_key, base_url, model, tg_token, tg_chat_id) |
+| `/auto` | Вкл/выкл авто-режим (таймер самостоятельности агента) |
+| `/paste` | Вставить clipboard как user-сообщение (Windows) |
+| `/tokens` | Статистика токенов за сессию |
+| `/stats` | Статистика вызовов инструментов |
+| `/verbose [on/off]` | Подробный вывод отладки |
+| `/info` | Системная информация |
+| `/help` | Справка |
+| `/exit` | Выход |
+
+### Горячие клавиши TUI
+
+| Клавиша | Действие |
+|---|---|
+| `Enter` | Отправить сообщение |
+| `Shift+Enter` | Новая строка в поле ввода |
+| `Tab` | Сменить режим (Build / Chat / Auto / User) |
+| `↑ / ↓` | История ввода или навигация по меню |
+| `Ctrl+N` | Меню настроек |
+| `Ctrl+L` | Очистить чат |
+| `Ctrl+C` | Остановить генерацию или выйти |
 
 ---
 
@@ -222,17 +296,18 @@ chmod +x start_API.sh
 
 В коде есть несколько уровней защиты:
 
-- безопасный калькулятор через AST вместо `eval()`;
-- блок-лист опасных shell-команд;
+- безопасный калькулятор через AST вместо `eval()` (с лимитом глубины);
+- блок-лист опасных shell-команд (`rm -rf /`, `mkfs`, `dd if=/dev/...` и т.д.);
 - таймауты на Python, shell и HTTP;
 - проверка и нормализация JSON-аргументов;
-- ограничение размера JSON для запросов;
-- best-effort песочница для Python на Unix;
-- защита от слишком длинных regex-паттернов в `grep`.
+- ограничение размера JSON для запросов и KV-хранилища (5 МБ);
+- best-effort песочница для Python на Unix (`RLIMIT_AS`, `RLIMIT_CPU`, запрет fork);
+- защита от ReDoS в `grep` (поток с таймаутом);
+- **Docker-песочница** (`sandbox_run`) — изолированный контейнер для опасных экспериментов.
 
-### Что означает “Тестово”
+### Что означает "Тестово"
 
-Слово “Тестово” здесь не декоративное. Оно означает вот что:
+Слово "Тестово" здесь не декоративное. Оно означает вот что:
 
 - защита **есть**, но она не гарантирует абсолютную безопасность;
 - sandbox в Python — это только частичная изоляция, а не полноценный jail;
@@ -265,246 +340,283 @@ chmod +x start_API.sh
 > - мгновенной совместимости со всеми backends;
 > - отсутствия поломок при экспериментальных настройках;
 > - гарантированной обратной совместимости между версиями.
->
-> Это нормальный инженерный статус для активно развивающегося агента.
 
 ---
 
-## Каталог инструментов
+## Каталог инструментов (110+)
 
-У проекта **76 инструментов**. Ниже они сгруппированы так, чтобы было проще понять, что за что отвечает.
+У проекта **более 100 инструментов**. Ниже они сгруппированы так, чтобы было проще понять, что за что отвечает. Точные схемы (параметры, enum, default) — в `/tools` внутри агента.
 
 <details>
-<summary><strong>Файлы и пути</strong> (20)</summary>
+<summary><strong>📁 Файлы и диск</strong> (21)</summary>
 
-- `read_file` — Прочитать текстовый файл. Поддерживает offset для постраничного чтения.
-- `write_file` — Записать содержимое в файл. Создаёт родительские директории.
-- `edit_file` — Точечная замена текста в файле.
-- `list_files` — Список файлов и директорий.
-- `search_files` — Рекурсивный поиск файлов по glob-паттерну.
-- `grep` — Поиск по содержимому файлов (regex).
-- `file_info` — Информация о файле или директории.
-- `diff_files` — Сравнить два файла и показать различия (unified diff).
-- `find_large_files` — Найти большие файлы (с фильтром node_modules/.git по умолчанию).
-- `disk_usage` — Использование диска директориями (с фильтром шумных папок).
-- `move` — Переместить файл/директорию.
-- `copy_file` — Скопировать файл (с сохранением метаданных).
-- `create_dir` — Создать директорию (рекурсивно).
-- `path_info` — Нормализует путь и показывает абсолютный путь + тип.
-- `binary_read` — Читает бинарный файл (hex/hex_raw/base64/bytes). По умолчанию hex-дамп как у xxd.
-- `binary_write` — Пишет бинарные данные (hex/base64/bytes/utf8/cp1251) в файл.
-- `binary_patch` — Бинарный патч: заменяет find_hex на replace_hex по offset'у. Длины должны совпадать.
+- `read_file` — Чтение текстового файла с offset/limit.
+- `write_file` — Запись файла (создание родительских папок).
+- `edit_file` — Точечная замена текста.
+- `list_files` — Список файлов/директорий (glob, hidden).
+- `search_files` — Рекурсивный поиск по glob.
+- `grep` — Поиск по содержимому (regex, защита от ReDoS).
+- `file_info` — Инфо о файле/директории.
+- `find_large_files` — Большие файлы (фильтр node_modules/.git).
+- `disk_usage` — Использование диска по папкам.
+- `move` — Перемещение файла/директории.
+- `copy_file` — Копирование файла.
+- `create_dir` — Создание директории.
+- `path_info` — Нормализация и разбор пути.
+- `binary_read` — Hex/Base64 дамп бинарного файла.
+- `binary_write` — Запись бинарных данных.
+- `binary_patch` — Патч бинарника (find_hex → replace_hex).
 - `checksum_file` — Хеш файла (md5/sha1/sha256/sha512).
-- `tail_file` — Последние N строк файла. follow=true — стримить новые (для логов).
-- `head_file` — Первые N строк файла.
-
+- `tail_file` — Хвост файла (follow для логов).
+- `head_file` — Первые строки файла.
+- `archive` — Упаковка/распаковка zip/tar/gz/bz2/xz.
 </details>
 
 <details>
-<summary><strong>Код и текст</strong> (20)</summary>
+<summary><strong>💻 Код и вычисления</strong> (25)</summary>
 
-- `run_python` — Выполнить Python-код в подпроцессе. sandbox=true добавляет изоляцию (best-effort).
-- `run_shell` — Выполнить shell-команду (bash/cmd).
-- `calculator` — Безопасный калькулятор. +, -, *, /, //, %, **, sin, cos, sqrt, pi, e.
-- `regex_test` — Тестировать регулярное выражение. Флаги: i, m, s, x.
-- `json_query` — Извлечь данные из JSON по точечному пути.
-- `format_json` — Форматировать/валидировать JSON.
-- `diff_text` — Diff двух текстов (не файлов). Для prompt-инжиниринга.
-- `jsonl_read` — Чтение JSON Lines (.jsonl/.ndjson) с фильтром по подстроке.
-- `jsonl_write` — Записать JSON-массив или объект как JSON Lines.
-- `encode_text` — Перекодировать текст: utf8, cp1251, koi8r, hex, base64, base32, url.
-- `decode_text` — Декодировать текст обратно (hex/base64/url/...).
-- `base64_encode` — Кодировать текст в Base64.
-- `base64_decode` — Декодировать Base64 в текст.
-- `hash_string` — Хешировать строку. Алгоритмы: md5, sha1, sha256, sha512.
-- `token_estimate` — Грубая оценка числа токенов в тексте (без tiktoken).
-- `convert_units` — Конвертация единиц: длина, масса, байты, время, температура.
-- `url_encode` — URL-encode строки.
-- `url_decode` — URL-decode строки.
-- `uuid_gen` — Генерирует UUID (v1, v4 или v7).
-- `generate_password` — Генерирует криптостойкий пароль (secrets). length 8-128.
-
+- `run_python` — Python в подпроцессе (+ sandbox на Unix).
+- `run_shell` — Shell-команда (блок-лист опасного).
+- `powershell` — PowerShell (только Windows).
+- `calculator` — Безопасный AST-калькулятор.
+- `convert_units` — Конвертация длины/массы/байт/времени/температуры.
+- `token_estimate` — Оценка токенов (эвристика).
+- `diff_text` — Diff двух текстов.
+- `regex_test` — Тест regex с флагами.
+- `format_json` — Форматирование/валидация JSON.
+- `json_query` — Извлечение по точечному пути.
+- `encode_text` — Перекодировка (utf8/cp1251/hex/base64/url).
+- `decode_text` — Обратное декодирование.
+- `jsonl_read` — Чтение JSON Lines.
+- `jsonl_write` — Запись JSON Lines.
+- `base64_encode` / `base64_decode` — Base64.
+- `hash_string` — Хеш строки.
+- `uuid_gen` — Генерация UUID (v1/v4/v7).
+- `generate_password` — Криптостойкий пароль (secrets).
+- `csv_read` / `csv_write` — CSV как таблица.
+- `xml_parse` — Парсинг XML → JSON.
+- `rss_read` — Чтение RSS/Atom.
+- `sqlite_query` — SQL к произвольному .db.
+- `python_process_manage` — Фоновые скрипты (run/kill/list).
 </details>
 
 <details>
-<summary><strong>Веб и сеть</strong> (6)</summary>
+<summary><strong>🌐 Веб и сеть</strong> (8)</summary>
 
-- `web_search` — Поиск в DuckDuckGo (HTML). Без API-ключа.
-- `web_fetch` — Загрузить URL и вернуть текст.
-- `http_request` — Произвольный HTTP-запрос.
-- `http_retry` — HTTP-запрос с retry + exponential backoff (повтор при 5xx и сетевых ошибках).
-- `port_check` — Проверить, открыт ли TCP-порт (Ollama 11434, LM Studio 1234, KoboldCpp 5001).
-- `wifi_list` — Список сохранённых WiFi-сетей и их паролей (через netsh). Только Windows.
-
+- `web_search` — DuckDuckGo HTML (без API-ключа).
+- `web_fetch` — Загрузка URL как текст.
+- `http_request` — Произвольный HTTP.
+- `http_retry` — HTTP + exponential backoff.
+- `url_encode` / `url_decode` — URL-кодирование.
+- `port_check` — Проверка TCP-порта.
+- `wifi_list` — WiFi-профили и пароли (Windows).
 </details>
 
 <details>
-<summary><strong>Память и продуктивность</strong> (8)</summary>
+<summary><strong>🪟 Windows Desktop</strong> (18)</summary>
 
-- `get_datetime` — Текущие дата и время.
-- `todo` — Управление списком задач. Действия: add, list, done, clear, delete.
-- `memory` — Долговременная память между сессиями. save, load, list, delete.
-- `kv_store` — Persistent key-value на SQLite (надёжнее JSON при крашах). actions: set, get, list, delete, search.
-- `timer` — Установить таймер (блокирующий).
-- `notify` — Системное уведомление (Toast/notify-send/msg.exe).
-- `env_get` — Получить значение переменной окружения (с маскированием секретов).
-- `env_list` — Список всех переменных окружения (с фильтром).
-
+- `list_windows` — Список окон.
+- `get_window_text` — Текст окна + дочерние элементы.
+- `focus_window` — На передний план.
+- `close_window` — Закрыть (force = kill).
+- `open_program` — Запуск программы/файла/URL.
+- `window_send_keys` — Отправка клавиш ({ENTER}, {CTRL+a}).
+- `click_window` — Клик по элементу/координатам.
+- `screenshot_window` — Скриншот окна (PrintWindow API).
+- `clipboard` — Буфер обмена (read/write).
+- `process_list` — Список процессов.
+- `kill_process` — Завершение по PID/имени.
+- `registry_read` — Чтение реестра.
+- `registry_manage` — Запись/удаление (требует confirm).
+- `service_list` / `service_manage` — Службы Windows.
+- `wmi_query` — WMI-запросы.
+- `system_stats` — CPU/RAM/батарея/температура.
+- `notify` — Системное уведомление.
 </details>
 
 <details>
-<summary><strong>Система и процессы</strong> (8)</summary>
+<summary><strong>📝 Память и организация</strong> (14)</summary>
 
-- `system_info` — Информация о системе (CPU, GPU, RAM, диск, ОС).
-- `process_list` — Список запущенных процессов.
-- `kill_process` — Завершить процесс по PID или имени.
-- `service_list` — Список Windows-сервисов (имя, статус, тип запуска).
-- `wmi_query` — WMI-запрос (только Windows). Примеры: 'SELECT * FROM Win32_Processor'.
-- `registry_read` — Чтение реестра Windows. Пример: 'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'.
-- `powershell` — Выполнить PowerShell-команду (только Windows).
-- `system_stats` — Живая CPU/RAM/диск/батарея/температура. Требует psutil для части метрик.
-
+- `memory` — Долговременная память (save/load/list/delete).
+- `kv_store` — KV на SQLite (set/get/list/delete/search).
+- `todo` — Список задач.
+- `notebook_list` / `notebook_read` / `notebook_write` / `notebook_delete` — Блочный блокнот.
+- `system_info` — Инфо о системе.
+- `get_datetime` — Текущее время.
+- `timer` — Таймер (блокирующий).
+- `session_summary` — Сжатие истории через резюме.
+- `env_get` / `env_list` — Переменные окружения.
+- `secret_manage` — Хранение паролей (keyring).
+- `ask_helper` — Второе мнение от той же LLM.
 </details>
 
 <details>
-<summary><strong>Git</strong> (3)</summary>
+<summary><strong>🔌 Интеграции и автоматизация</strong> (20)</summary>
 
-- `git_status` — Git статус директории.
-- `git_diff` — Git diff.
-- `git_log` — Git log.
-
+- `telegram_manage` — Отправка в Telegram (бот).
+- `discord_manage` — Webhook в Discord.
+- `email_manage` — Отправка почты (SMTP).
+- `websocket_manage` — WebSocket client.
+- `browser_manage` — Открытие ссылок.
+- `docker_manage` — Docker run/stop/exec.
+- `sandbox_run` — Изолированная Docker-песочница (bash/python).
+- `pip_manage` — Установка pip-пакетов.
+- `venv_manage` — Виртуальные окружения.
+- `task_manage` — Планировщик Windows.
+- `startup_manage` — Автозапуск (реестр/crontab).
+- `orchestration_manage` — Ansible / Kubernetes.
+- `watch_file` — Наблюдение за файлом.
+- `watch_process` — Наблюдение за процессом.
+- `scheduled_message` — Отложенное напоминание.
+- `self_update` — Самообновление скрипта.
+- `media_manage` — Звук/скриншот.
+- `power_manage` — Сон/гибернация.
+- `gui_manage` — GUI-управление.
 </details>
 
 <details>
-<summary><strong>Desktop и Windows</strong> (9)</summary>
+<summary><strong>📊 Данные и прочее</strong> (5)</summary>
 
-- `list_windows` — Список всех открытых окон на рабочем столе Windows. Только Windows.
-- `get_window_text` — Читает текст из окна: заголовок и дочерние элементы. Только Windows.
-- `focus_window` — Выводит окно на передний план. Только Windows.
-- `close_window` — Закрывает окно. force=true принудительно завершает процесс. Только Windows.
-- `open_program` — Запускает программу, открывает файл или URL. Только Windows.
-- `window_send_keys` — Отправляет нажатия клавиш в окно. {ENTER}, {TAB}, {CTRL+a}, {ALT+F4}. Только Windows.
-- `click_window` — Кликает по элементу в окне (по тексту или координатам). Только Windows.
-- `screenshot_window` — Скриншот окна Windows (сохраняется в файл). Только Windows.
-- `clipboard` — Работа с буфером обмена (только Windows). Действия: read, write.
-
-</details>
-
-<details>
-<summary><strong>Данные и архивы</strong> (2)</summary>
-
-- `archive` — Упаковка/распаковка архивов (zip/tar/gz/bz2/xz).
-- `csv_read` — Прочитать CSV-файл как таблицу.
-
+- `search_all` — Поиск по именам и содержимому.
+- `diff_files` — См. Файлы.
 </details>
 
 ---
 
 ## Репозиторные скрипты
 
-### `start_API.bat`
+### `Start.bat`
 
-Windows-лаунчер с установкой Python и зависимостей.
+Windows-лаунчер: Python + зависимости + автодетект бэкенда + меню.
 
-### `start_API.sh`
+### `AI-agent.py`
 
-Linux/Termux-лаунчер для быстрого старта без лишней магии.
+Единый файл: ядро + TUI. Запуск `python AI-agent.py` или с `--console`.
 
 ---
 
 ## Для кого этот проект
 
 Подходит, если нужен агент, который:
-
 - работает локально;
 - не прячется за тяжёлым фреймворком;
 - умеет реальные действия, а не только диалог;
-- удобен для автоматизации и экспериментов;
+- имеет TUI и консоль;
 - можно быстро прочитать и дописать под себя.
 
-Не подходит, если нужен “готовый магический комбайн”, который сам всё сделает без контроля. Тут всё честнее и ближе к инженерному инструменту.
+Не подходит, если нужен "готовый магический комбайн" без контроля.
 
 ---
 
 ## 📜 Лицензия
 
-На данный момент лицензия для проекта не выбрана.
-
-Честно говоря, пока я не хочу добавлять её просто "для галочки".
-
-Если проект дойдёт до более зрелого состояния и начнёт активно использоваться другими людьми, в репозитории появится файл `LICENSE`, а условия использования будут явно зафиксированы.
-
-До этого момента считайте, что проект находится в активной разработке и вопрос лицензирования остаётся открытым.
+На данный момент лицензия для проекта не выбрана. Если проект дойдёт до более зрелого состояния, появится `LICENSE`.
 
 ---
 
 ## Частые вопросы
 
 <details>
-<summary><strong>Почему два режима tool calling?</strong></summary>
+<summary><strong>Почему два интерфейса (TUI и Console)?</strong></summary>
 
-Потому что не все модели умеют native tools. Одни бэкенды работают через OpenAI-совместимый API, другие — только через prompt-инструкции. Агент умеет оба варианта, чтобы не ломаться на выборе backend’а.
-
+TUI удобен для повседневной работы с анимациями и чатом, а консольный режим — для серверов и минимальных окружений (только stdlib).
 </details>
 
 <details>
-<summary><strong>Почему здесь так много защитных оговорок?</strong></summary>
+<summary><strong>Зачем Docker-песочница?</strong></summary>
 
-Потому что агент исполняет реальные действия. Красивый README не должен создавать иллюзию абсолютной безопасности там, где её нет.
-
+Чтобы дать агенту ломать всё в изолированном контейнере, не трогая хост. Особенно полезно в авто-режиме (фоновые эксперименты).
 </details>
 
 <details>
-<summary><strong>Почему “Тестово” написано так подробно?</strong></summary>
+<summary><strong>Почему так много защитных оговорок?</strong></summary>
 
-Потому что это не маркетинговая пометка, а честная техническая граница: защита помогает, но не делает агент безошибочным и не делает модель безопасной по определению.
-
+Потому что агент исполняет реальные действия. Красивый README не должен создавать иллюзию абсолютной безопасности.
 </details>
 
 ---
 
-## Коротко: что делает проект сильным
+<details>
+<summary><strong>Почему проект всё ещё развивается?</strong></summary>
 
-- один файл;
-- реальные инструменты;
-- native + prompt fallback;
-- streaming;
-- параллельные tool calls;
-- локальная память;
-- Windows / Linux / Termux;
-- прозрачность и расширяемость.
+Universal LLM Agent не создавался как коммерческий продукт или попытка собрать очередной "идеальный AI-фреймворк".
+Это личный проект, который растёт вместе с задачами, которые я решаю сам. Многие функции появились потому, что однажды мне не хватило их в другом агенте, а потом оказалось, что они полезны и другим.
+Если какая-то часть проекта кажется необычной, скорее всего, за ней стоит вполне конкретная причина. И если у вас есть идея, как сделать её лучше, я буду рад её обсудить.
+</details>
+
 ---
 
-# Благадарность за помошь
+## Благодарность за помощь
+
 <div align="center">
-  <a href="https://github.com/geme325" title="QA-тестер: Поиск багов и проверка на прочность">
+  <a href="https://github.com/geme325" title="QA-тестер">
     <img src="https://wsrv.nl/?url=github.com/geme325.png&w=60&h=60&fit=cover&mask=circle" width="60" alt="geme325"/>
     <br />
     <sub><b>geme325</b></sub>
   </a>
 </div>
 
----
-
 ## Помощь
 
-Если вы нашли баги, ошибки или столкнулись с проблемами, пожалуйста, напишите о них на почту byteghosthelper@gmail.com. Желательно прикрепить к письму файл сохранения (сделав /save bug), чтобы я мог просмотреть сессию и понять, в какой именно момент появилась проблема. Также, пожалуйста, добавьте текстовое описание самой ошибки.
+Если вы нашли баги, ошибки или столкнулись с проблемами, пишите на byteghosthelper@gmail.com (желательно с `/save bug`).
 
 ---
+
+
+
+
+
+
+
 
 # 🇺🇸 English Version
 
+
+## Universal LLM Agent
+
+---
+The Universal LLM Agent came into existence simply because I needed exactly that kind of agent. It has its fair share of flaws, quirks, and experimental choices, but it is my personal project. If it turns out to be useful to others besides me, then it was all worth it.
+
+---
+
+<p align="center">
+  <strong>Lightweight CLI + TUI agent for local and cloud LLMs with real tool calling</strong><br>
+  Single Python file • Minimal dependencies • Native + prompt-based modes • Windows / Linux / Termux • Beautiful Textual TUI
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/Version-2.0-purple?style=for-the-badge" alt="Version 2.0">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Termux-success?style=for-the-badge" alt="Platform">
+  <img src="https://img.shields.io/badge/Tools-100%2B-orange?style=for-the-badge" alt="Tools">
+  <img src="https://img.shields.io/badge/Core-Single%20file-cyan?style=for-the-badge" alt="Single file">
+  <img src="https://img.shields.io/badge/TUI-Textual-9cf?style=for-the-badge" alt="TUI">
+</p>
+
+> [!IMPORTANT]
+> The project is under active development. Some features are already working and useful, but the whole stack does not promise full completeness, identical stability across all platforms, or identical behavior across all models and backends.
+
+> [!WARNING]
+> This is a tool with access to real actions. It reduces risk but does not make any model safe by default. For critical tasks, operator supervision is always required.
+
+---
+
 ## What it is
 
-Universal LLM Agent is a lightweight CLI agent that connects an LLM to real tools: files, shell, Python, HTTP, memory, Git, system inspection, and parts of desktop automation.
+Universal LLM Agent is a lightweight CLI/TUI agent that connects an LLM to real tools: files, shell, Python, Docker sandbox, HTTP, Telegram, Windows desktop automation, and more.
 
-It is designed to work in two worlds at once:
+In version **2.0** (`AI-agent.py`) the core of the former console agent (`local_agent.py`) is merged with a Textual-based TUI. It is a single Python file that can run in two interfaces:
+- **TUI** — full-screen chat with sidebar, starfield animations, smooth message arrival;
+- **Console** — classic REPL working on stdlib Python 3.11+ only.
 
-- with models that already support native `tools` APIs;
-- with models that do not support tools at all, using a prompt-based Hermes-style fallback.
+The model does not just generate text. — it calls functions via a unified tool layer (110+ tools).
+
+Key feature: it works in two worlds at once:
+- models with native `tools` API (OpenAI-compatible);
+- models without tools, taught via prompt-based Hermes-style `<tool_call>` fallback.
 
 > [!NOTE]
-> This README is intentionally honest about maturity: stable pieces are described as stable, and experimental pieces are called out explicitly.
+> This README is intentionally honest: stable pieces are described as stable, experimental pieces are called out explicitly.
 
 ---
 
@@ -527,10 +639,10 @@ It is designed to work in two worlds at once:
 
 The core stays deliberately simple:
 
-- one Python file;
-- standard library only in the core;
-- a transparent tool registry;
-- a straightforward REPL;
+- one Python file (`AI-agent.py`);
+- standard library only in the core (console mode needs no pip packages);
+- a transparent tool registry (`ToolRegistry`);
+- a straightforward REPL + a beautiful TUI;
 - local config files instead of a heavy service stack;
 - support for both local and cloud backends.
 
@@ -542,14 +654,33 @@ This is not an attempt to build a magical AGI orchestra. It is a practical agent
 
 The agent can:
 
-- stream model output as it is generated;
+- stream model output as it is generated (text + reasoning/thinking);
 - show reasoning / thinking separately;
 - collect tool calls from streamed chunks and plain text;
 - switch between native and prompt tool calling;
-- execute multiple independent tool calls in parallel;
-- store notes, todo items, and key-value data between sessions;
-- work with files, shell, Python, HTTP, Git, system tools, and Windows desktop actions;
-- produce readable, colored CLI output.
+- execute multiple independent tool calls in parallel (`<tools_call>` + `ThreadPoolExecutor`);
+- store notes, todo items, key-value data and a block notebook between sessions;
+- work with files, shell, Python, HTTP, Git, system tools, and Windows desktop;
+- run dangerous experiments in an isolated Docker container (`sandbox_run`);
+- receive messages from Telegram and reply via Telegram / Discord;
+- request a "second opinion" from the same LLM via `ask_helper` (roles: critic, planner, interpreter, reviewer, creative, roleplayer);
+- produce readable colored CLI output or a pretty animated TUI.
+
+---
+
+## Launch modes
+
+```bash
+python AI-agent.py            # TUI (Textual) — default
+python AI-agent.py --console  # Console REPL mode
+python AI-agent.py --console --backend ollama   # Console + backend preset
+python AI-agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
+```
+
+| Mode | Dependencies | Purpose |
+|---|---|---|
+| TUI | `textual`, `rich`, `pyperclip` (opt.), `psutil`, `win10toast` (opt.), `Pillow` | Full-screen chat, sidebar, command autocomplete |
+| Console | stdlib Python 3.11+ only | Minimal REPL, minimal environment |
 
 ---
 
@@ -557,15 +688,15 @@ The agent can:
 
 ```mermaid
 flowchart TD
-    U[User] --> R[CLI REPL]
+    U[User] --> R[CLI REPL or TUI]
     R --> P[System prompt / tool schema]
     P --> L[LLM backend]
     L -->|content / reasoning / tool_calls| R
     R --> T[Tool registry]
-    T --> F[Files]
-    T --> S[Shell / Python]
-    T --> W[Web / HTTP]
-    T --> M[Memory / todo / kv]
+    T --> F[Files and disk]
+    T --> S[Shell / Python / Docker]
+    T --> W[Web / HTTP / Telegram]
+    T --> M[Memory / todo / kv / notebook]
     T --> D[Desktop / Windows]
     T --> G[Git / system / data]
 ```
@@ -577,16 +708,14 @@ flowchart TD
 - `auto` — the agent tries native first and falls back when the backend does not support tools.
 
 > [!TIP]
-> For backends like Ollama, LM Studio, and vLLM, native mode is usually the cleanest fit. For llama.cpp and KoboldCpp, prompt mode is often the practical choice.
+> For Ollama, LM Studio, and vLLM, native mode is usually the cleanest fit. For KoboldCpp and llama.cpp, prompt mode is often the practical choice.
 
 ### What gets parsed
 
 From the code, the agent can:
-
-- stream `content`;
-- stream `reasoning_content`;
+- stream `content` and `reasoning_content`;
 - accumulate `tool_calls` incrementally from the stream;
-- parse `<think>...</think>`;
+- parse `<think>...</think>` and hard-hide them from the user output;
 - parse `<tool_call>...</tool_call>`;
 - parse `<tools_call>...</tools_call>` for parallel calls;
 - recover tool calls from raw JSON when a model emits JSON without the expected wrapper.
@@ -599,7 +728,7 @@ From the code, the agent can:
 |---|---:|---|---|
 | Ollama | Yes | `http://localhost:11434/v1` | `ollama serve` + `ollama pull <model>` |
 | LM Studio | Yes | `http://localhost:1234/v1` | Enable the local server on port 1234 |
-| vLLM | Yes | `http://localhost:8000/v1` | Good fit for tool calling |
+| vLLM | Yes | `http://localhost:8000/v1` | `--tool-call-parser hermes` |
 | OpenAI | Yes | `https://api.openai.com/v1` | Needs `OPENAI_API_KEY` |
 | OpenRouter | Yes | custom | Any OpenAI-compatible endpoint |
 | Groq | Yes | `https://api.groq.com/openai/v1` | Needs `GROQ_API_KEY` |
@@ -617,33 +746,57 @@ From the code, the agent can:
 Launch with:
 
 ```bat
-start_API.bat
+Start.bat
 ```
 
 The launcher:
+- checks Python (downloads 3.11.9 with PrependPath=1 if missing);
+- installs `textual rich pyperclip psutil win10toast Pillow`;
+- auto-detects backend via `netstat`;
+- opens the agent launch menu (TUI / Console / Exit).
 
-- checks whether Python is installed;
-- downloads Python 3.11.8 if needed;
-- adds Python to PATH for the current session;
-- installs `psutil`, `win10toast`, and `Pillow`;
-- opens a simple launch menu for the agent.
 
 ### Linux / Termux
 
+<details open>
+<summary><strong>🐧 No pre-built launcher — the agent is started manually from the terminal</strong></summary>
+
+#### 1. Ensure Python 3.11+ is installed
+
 ```bash
-chmod +x start_API.sh
-./start_API.sh
+python --version
 ```
 
-The launcher:
+2. Install system dependencies
+These are required for Pillow and for Textual to function correctly.
 
-- checks for `python3`;
-- upgrades `pip`;
-- installs `psutil` and `Pillow`;
-- launches `local_agent.py`.
+Debian / Ubuntu
+
+```bash
+sudo apt update
+sudo apt install python-pip 
+```
+
+Termux
+
+```bash
+pkg install python python-pip 
+```
+
+3. Install Python dependencies for the TUI
+```bash
+pip install textual rich pyperclip psutil Pillow
+```
+
+4. Start the agent
+```bash
+python AI-agent.py            # TUI (default)
+python AI-agent.py --console  # Console mode
+```
+</details>
 
 > [!NOTE]
-> The launchers are intentionally simple. Their job is to bring the environment up quickly, not hide everything behind a complex wrapper.
+> For pure console mode (`--console`) no dependencies are needed — only stdlib.
 
 ---
 
@@ -653,19 +806,20 @@ On first launch, the agent stores profile and local state in the user’s home d
 
 | File | Purpose |
 |---|---|
-| `~/.local_agent_user.json` | API key, base URL, model, user profile |
-| `~/.local_agent_prompt.json` | Saved system prompt |
-| `~/.local_agent_memory.json` | Local memory |
-| `~/.local_agent_kv.sqlite` | KV storage |
-| `~/.local_agent_todos.json` | Todo list |
+| `~/.local_agent_user.json` | API key, base URL, model, user/agent name, Telegram/Discord |
+| `~/.local_agent_prompt.json` | Saved system prompt (with `AGENT_VERSION`) |
+| `~/.local_agent_memory.json` | Local memory (`memory`) |
+| `~/.local_agent_kv.sqlite` | KV storage on SQLite |
+| `~/.local_agent_notebook.md` | Block notebook for long-term memory |
+| `~/.mimo_tui_session.json` | TUI session history |
 
 ### Important note about paths
 
-Relative paths are resolved against `AGENT_WORKSPACE`. Absolute paths are allowed too. That is convenient, but it is not a hard sandbox. The README should say this plainly: the agent helps you work with files, but it does not magically armor them against every model mistake.
+Relative paths are resolved against `AGENT_WORKSPACE`. Absolute paths are allowed too. That is convenient, but it is not a hard sandbox.
 
 ---
 
-## CLI commands
+## CLI commands (console mode)
 
 | Command | What it does |
 |---|---|
@@ -674,12 +828,31 @@ Relative paths are resolved against `AGENT_WORKSPACE`. Absolute paths are allowe
 | `/history [N]` | Show the last N messages |
 | `/save <file>` | Save the session |
 | `/load <file>` | Load a session |
-| `/system` | View or edit the system prompt |
-| `/workspace <dir>` | Change the agent workspace |
+| `/system [prompt]` | View or edit the system prompt |
+| `/workspace [dir]` | Change the agent workspace |
 | `/mode <auto|native|prompt>` | Force a tool-calling mode |
-| `/profile` | Edit the API profile |
+| `/compact [on/off]` | Compact prompt (fewer tokens) |
+| `/profile` | Edit the API profile (api_key, base_url, model, tg_token, tg_chat_id) |
+| `/auto` | Toggle auto-mode (agent autonomy timer) |
+| `/paste` | Paste clipboard as user message (Windows) |
+| `/tokens` | Session token statistics |
+| `/stats` | Tool call statistics |
+| `/verbose [on/off]` | Debug output |
 | `/info` | Show system information |
+| `/help` | Help |
 | `/exit` | Quit |
+
+### TUI keybindings
+
+| Key | Action |
+|---|---|
+| `Enter` | Send message |
+| `Shift+Enter` | Newline in input |
+| `Tab` | Switch mode (Build / Chat / Auto / User) |
+| `↑ / ↓` | Input history or menu navigation |
+| `Ctrl+N` | Settings menu |
+| `Ctrl+L` | Clear chat |
+| `Ctrl+C` | Stop generation or exit |
 
 ---
 
@@ -690,13 +863,14 @@ Relative paths are resolved against `AGENT_WORKSPACE`. Absolute paths are allowe
 
 The code includes several layers of protection:
 
-- AST-based calculator instead of `eval()`;
-- a blocklist for dangerous shell commands;
+- AST-based calculator instead of `eval()` (with depth limit);
+- a blocklist for dangerous shell commands (`rm -rf /`, `mkfs`, `dd if=/dev/...` etc.);
 - timeouts for Python, shell, and HTTP;
 - JSON argument validation and normalization;
-- size limits for JSON payloads;
-- a best-effort Python sandbox on Unix;
-- protection against overly long regex patterns in `grep`.
+- size limits for JSON payloads and KV storage (5 MB);
+- a best-effort Python sandbox on Unix (`RLIMIT_AS`, `RLIMIT_CPU`, no fork);
+- protection against overly long regex patterns in `grep` (threaded timeout);
+- **Docker sandbox** (`sandbox_run`) — isolated container for dangerous experiments.
 
 ### What “experimental / test-oriented” means
 
@@ -733,252 +907,225 @@ That is why this project should be treated as a powerful automation tool, not as
 > - instant compatibility with every backend;
 > - no breakage under experimental settings;
 > - guaranteed backward compatibility between versions.
->
-> That is a normal engineering status for an actively evolving agent.
 
 ---
 
-## Tool catalog
+## Tool catalog (110+)
 
-The project exposes **76 tools**. They are grouped below so the purpose of each area stays easy to understand.
+The project exposes **110+ tools**. They are grouped below so the purpose of each area stays easy to understand. Exact schemas (params, enum, default) — via `/tools` inside the agent.
 
 <details>
-<summary><strong>Files & paths</strong> (20)</summary>
+<summary><strong>📁 Files & disk</strong> (21)</summary>
 
-Read, write, search, diff, inspect and patch files, folders, and binary data.
-
-Exact tool names:
-- `read_file`
-- `write_file`
-- `edit_file`
-- `list_files`
-- `search_files`
-- `grep`
-- `file_info`
-- `diff_files`
-- `find_large_files`
-- `disk_usage`
-- `move`
-- `copy_file`
-- `create_dir`
-- `path_info`
-- `binary_read`
-- `binary_write`
-- `binary_patch`
-- `checksum_file`
-- `tail_file`
-- `head_file`
-
+- `read_file` — Read text file with offset/limit.
+- `write_file` — Write file (creates parent dirs).
+- `edit_file` — In-place text replacement.
+- `list_files` — List files/dirs (glob, hidden).
+- `search_files` — Recursive glob search.
+- `grep` — Content search (regex, ReDoS-safe).
+- `file_info` — File/dir info.
+- `find_large_files` — Large files (skip node_modules/.git).
+- `disk_usage` — Disk usage per folder.
+- `move` — Move file/dir.
+- `copy_file` — Copy file.
+- `create_dir` — Create directory.
+- `path_info` — Normalize and explain a path.
+- `binary_read` — Hex/Base64 dump of binary.
+- `binary_write` — Write binary data.
+- `binary_patch` — Patch binary (find_hex → replace_hex).
+- `checksum_file` — File hash (md5/sha1/sha256/sha512).
+- `tail_file` — File tail (follow for logs).
+- `head_file` — First lines of file.
+- `archive` — Zip/tar/gz/bz2/xz create/extract.
 </details>
 
 <details>
-<summary><strong>Code & text</strong> (20)</summary>
+<summary><strong>💻 Code & compute</strong> (25)</summary>
 
-Run code, evaluate expressions, inspect JSON, transform text, and encode/decode data.
-
-Exact tool names:
-- `run_python`
-- `run_shell`
-- `calculator`
-- `regex_test`
-- `json_query`
-- `format_json`
-- `diff_text`
-- `jsonl_read`
-- `jsonl_write`
-- `encode_text`
-- `decode_text`
-- `base64_encode`
-- `base64_decode`
-- `hash_string`
-- `token_estimate`
-- `convert_units`
-- `url_encode`
-- `url_decode`
-- `uuid_gen`
-- `generate_password`
-
+- `run_python` — Python in subprocess (+ Unix sandbox).
+- `run_shell` — Shell command (danger blocklist).
+- `powershell` — PowerShell (Windows only).
+- `calculator` — Safe AST calculator.
+- `convert_units` — Length/mass/bytes/time/temp conversion.
+- `token_estimate` — Token estimate (heuristic).
+- `diff_text` — Diff two texts.
+- `regex_test` — Test regex with flags.
+- `format_json` — Format/validate JSON.
+- `json_query` — Extract by dot path.
+- `encode_text` — Recode (utf8/cp1251/hex/base64/url).
+- `decode_text` — Reverse decode.
+- `jsonl_read` — Read JSON Lines.
+- `jsonl_write` — Write JSON Lines.
+- `base64_encode` / `base64_decode` — Base64.
+- `hash_string` — String hash.
+- `uuid_gen` — UUID (v1/v4/v7).
+- `generate_password` — Crypto password (secrets).
+- `csv_read` / `csv_write` — CSV as table.
+- `xml_parse` — Parse XML → JSON.
+- `rss_read` — Read RSS/Atom.
+- `sqlite_query` — SQL on any .db.
+- `python_process_manage` — Background scripts (run/kill/list).
 </details>
 
 <details>
-<summary><strong>Web & network</strong> (6)</summary>
+<summary><strong>🌐 Web & network</strong> (8)</summary>
 
-Search the web, fetch pages, issue HTTP requests, and check network state.
-
-Exact tool names:
-- `web_search`
-- `web_fetch`
-- `http_request`
-- `http_retry`
-- `port_check`
-- `wifi_list`
-
+- `web_search` — DuckDuckGo HTML (no key).
+- `web_fetch` — Fetch URL as text.
+- `http_request` — Arbitrary HTTP.
+- `http_retry` — HTTP + exponential backoff.
+- `url_encode` / `url_decode` — URL encoding.
+- `port_check` — TCP port check.
+- `wifi_list` — WiFi profiles & passwords (Windows).
 </details>
 
 <details>
-<summary><strong>Memory & productivity</strong> (8)</summary>
+<summary><strong>🪟 Windows Desktop</strong> (18)</summary>
 
-Store notes, todos, key-value data, timestamps, and environment information locally.
-
-Exact tool names:
-- `get_datetime`
-- `todo`
-- `memory`
-- `kv_store`
-- `timer`
-- `notify`
-- `env_get`
-- `env_list`
-
+- `list_windows` — List windows.
+- `get_window_text` — Window text + children.
+- `focus_window` — Bring to front.
+- `close_window` — Close (force = kill).
+- `open_program` — Launch program/file/URL.
+- `window_send_keys` — Send keys ({ENTER}, {CTRL+a}).
+- `click_window` — Click element/coords.
+- `screenshot_window` — Window screenshot (PrintWindow API).
+- `clipboard` — Clipboard (read/write).
+- `process_list` — List processes.
+- `kill_process` — Kill by PID/name.
+- `registry_read` — Read registry.
+- `registry_manage` — Write/delete (needs confirm).
+- `service_list` / `service_manage` — Windows services.
+- `wmi_query` — WMI queries.
+- `system_stats` — CPU/RAM/battery/temp.
+- `notify` — System notification.
 </details>
 
 <details>
-<summary><strong>System & processes</strong> (8)</summary>
+<summary><strong>📝 Memory & productivity</strong> (14)</summary>
 
-Inspect processes, services, registry, WMI, and general system state.
-
-Exact tool names:
-- `system_info`
-- `process_list`
-- `kill_process`
-- `service_list`
-- `wmi_query`
-- `registry_read`
-- `powershell`
-- `system_stats`
-
+- `memory` — Long-term memory (save/load/list/delete).
+- `kv_store` — KV on SQLite (set/get/list/delete/search).
+- `todo` — Task list.
+- `notebook_list` / `notebook_read` / `notebook_write` / `notebook_delete` — Block notebook.
+- `system_info` — System info.
+- `get_datetime` — Current time.
+- `timer` — Timer (blocking).
+- `session_summary` — Compress history via summary.
+- `env_get` / `env_list` — Environment variables.
+- `secret_manage` — Password storage (keyring).
+- `ask_helper` — Second opinion (see above).
 </details>
 
 <details>
-<summary><strong>Git</strong> (3)</summary>
+<summary><strong>🔌 Integrations & automation</strong> (20)</summary>
 
-Inspect repository state and history.
-
-Exact tool names:
-- `git_status`
-- `git_diff`
-- `git_log`
-
+- `telegram_manage` — Send to Telegram (bot).
+- `discord_manage` — Discord webhook.
+- `email_manage` — Send email (SMTP).
+- `websocket_manage` — WebSocket client.
+- `browser_manage` — Open links.
+- `docker_manage` — Docker run/stop/exec.
+- `sandbox_run` — Isolated Docker sandbox (bash/python).
+- `pip_manage` — Install pip packages.
+- `venv_manage` — Virtual environments.
+- `task_manage` — Windows scheduler.
+- `startup_manage` — Autostart (registry/crontab).
+- `orchestration_manage` — Ansible / Kubernetes.
+- `watch_file` — Watch file changes.
+- `watch_process` — Watch process state.
+- `scheduled_message` — Delayed reminder.
+- `self_update` — Self-update script.
+- `media_manage` — Sound/screenshot.
+- `power_manage` — Sleep/hibernate.
+- `gui_manage` — GUI control.
 </details>
 
 <details>
-<summary><strong>Desktop & Windows</strong> (9)</summary>
+<summary><strong>📊 Data & misc</strong> (5)</summary>
 
-Interact with windows, keyboard, mouse, clipboard, and screenshots on Windows.
-
-Exact tool names:
-- `list_windows`
-- `get_window_text`
-- `focus_window`
-- `close_window`
-- `open_program`
-- `window_send_keys`
-- `click_window`
-- `screenshot_window`
-- `clipboard`
-
-</details>
-
-<details>
-<summary><strong>Data & archives</strong> (2)</summary>
-
-Work with archives and CSV data.
-
-Exact tool names:
-- `archive`
-- `csv_read`
-
+- `search_all` — Search names and content.
+- `diff_files` — See Files.
+- `csv_read` — See Code.
+- `xml_parse` — See Code.
+- `rss_read` — See Code.
 </details>
 
 ---
 
 ## Repository scripts
 
-### `start_API.bat`
+### `Start.bat`
 
-A Windows launcher that bootstraps Python and dependencies.
+Windows launcher: Python + deps + backend autodetect + menu.
 
-### `start_API.sh`
+### `AI-agent.py`
 
-A Linux / Termux launcher for a quick startup without extra ceremony.
+Single file: core + TUI. Run `python AI-agent.py` or with `--console`.
 
 ---
 
 ## Who this project is for
 
 This fits if you want an agent that:
-
 - works locally;
 - does not hide behind a heavy framework;
 - can perform real actions, not just chat;
-- is practical for automation and experiments;
+- has both TUI and console;
 - is readable enough to be extended by hand.
 
-It is not for people who want a “magic all-in-one bot” that should safely handle everything without oversight. This project is more honest and more engineering-oriented.
+It is not for people who want a “magic all-in-one bot” that should safely handle everything without oversight.
 
 ---
 
 ## 📜 License
 
-At this point, no license has been selected for the project.
-
-Honestly, I don't want to add it just for the sake of it.
-
-If the project matures and begins to be actively used by others, a `LICENSE` file will appear in the repository, and the terms of use will be clearly stated.
-
-Until then, consider the project to be in active development, and the licensing issue remains open.
+At this point, no license has been selected for the project. If the project matures, a `LICENSE` file will appear.
 
 ---
 
 ## FAQ
 
 <details>
-<summary><strong>Why two tool-calling modes?</strong></summary>
+<summary><strong>Why two interfaces (TUI and Console)?</strong></summary>
 
-Because not every model supports native tools. Some backends work through an OpenAI-compatible API, while others only work through prompt instructions. The agent supports both so the backend choice does not become a dead end.
+TUI is convenient for daily use with animations and chat; console mode is for servers and minimal environments (stdlib only).
+</details>
 
+<details>
+<summary><strong>Why a Docker sandbox?</strong></summary>
+
+To let the agent break things in an isolated container without touching the host. Especially useful in auto-mode (background experiments).
 </details>
 
 <details>
 <summary><strong>Why so many safety notes?</strong></summary>
 
 Because the agent executes real actions. A polished README should not create an illusion of absolute safety where none exists.
-
 </details>
+
+---
 
 <details>
-<summary><strong>Why is “test-oriented” explained so thoroughly?</strong></summary>
+<summary><strong>Why is the project still evolving?</strong></summary>
 
-Because it is not a marketing label. It is a real technical boundary: guardrails help, but they do not make the agent flawless or the model safe by definition.
-
+The Universal LLM Agent was not created as a commercial product or an attempt to build yet another "perfect AI framework."
+It is a personal project that grows alongside the tasks I tackle myself. Many features emerged simply because I found them missing in other agents—and it turned out others found them useful, too.
+If any part of the project seems unusual, there is likely a very specific reason for it. And if you have an idea on how to improve it, I’d be happy to discuss it.
 </details>
 
 ---
 
-## In one line
+## Thanks for your help
 
-- one file;
-- real tools;
-- native + prompt fallback;
-- streaming;
-- parallel tool calls;
-- local memory;
-- Windows / Linux / Termux;
-- transparent and extensible.
-
----
-
-# Thanks for your help
 <div align="center">
-  <a href="https://github.com/geme325" title="QA Tester: Bug Finding and Strength Testing">
+  <a href="https://github.com/geme325" title="QA Tester">
     <img src="https://wsrv.nl/?url=github.com/geme325.png&w=60&h=60&fit=cover&mask=circle" width="60" alt="geme325"/>
     <br />
     <sub><b>geme325</b></sub>
   </a>
 </div>
 
----
-
 ## Help
 
-If you find any bugs, errors, or encounter any issues, please report them to byteghosthelper@gmail.com. It is highly recommended to attach a save file (created with the /save bug command) to your email, so I can review the session and pinpoint exactly when the problem occurred. Please also include a detailed text description of the error itself.
+If you find any bugs, errors, or issues, report them to byteghosthelper@gmail.com (attach a `/save bug` file if possible).
