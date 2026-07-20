@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/TUI-Textual-9cf?style=for-the-badge" alt="TUI">
   <img src="https://img.shields.io/pypi/v/universal-llm-agent?style=for-the-badge&color=3776AB&logo=pypi&logoColor=white" alt="PyPI version">
 </p>
-
+ 
 <p align="center">
   <a href="#-русская-версия">Русский</a> · <a href="#-english-version">English</a>
 </p>
