@@ -78,6 +78,9 @@ if errorlevel 3 goto EXIT
 if errorlevel 2 goto RUN_CONSOLE
 if errorlevel 1 goto RUN_TUI
 
+:: SPDX-License-Identifier: MIT
+:: Copyright (c) 2026 ByteGhost. See LICENSE for details.
+
 :RUN_TUI
 cls
 echo Starting TUI mode...
