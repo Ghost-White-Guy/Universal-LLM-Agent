@@ -1,4 +1,6 @@
-#  Universal LLM Agent
+<img width="915" height="150" alt="623754555-210c686a-1824-490c-98f9-dbf3cb152d3d" src="https://github.com/user-attachments/assets/b4cbe09c-d3fb-4788-a6d2-e301c6500af5" />
+
+
 
 <p align="center">
   <strong>Лёгкий CLI + TUI агент для локальных и облачных LLM с реальным tool calling</strong><br>
