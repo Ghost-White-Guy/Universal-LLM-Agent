@@ -581,6 +581,11 @@ Universal LLM Agent не создавался как коммерческий п
 ---
 The Universal LLM Agent came into existence simply because I needed exactly that kind of agent. It has its fair share of flaws, quirks, and experimental choices, but it is my personal project. If it turns out to be useful to others besides me, then it was all worth it.
 
+> [!NOTE]
+> The demo below is in Russian (the agent currently ships with a Russian-only system prompt/context). English localization is planned — for now the video still shows the actual TUI, tool calling, and workflow in action.
+
+https://github.com/user-attachments/assets/dd61a5bf-4409-4eeb-8210-2ba6bccc39cb
+
 ---
 
 <p align="center">
