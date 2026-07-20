@@ -3,7 +3,7 @@
 unified_agent.py — Local Agent + TUI (объединённая сборка)
 
 Слито из local_agent.py (ядро: LLM-клиент, 80+ инструментов, калькулятор,
-Windows API, файловые операции и т.д.) и mimotui.py (TUI на Textual).
+Windows API, файловые операции и т.д.) и tui.py (TUI на Textual).
 
 Режимы запуска:
   python unified_agent.py            — запуск TUI (по умолчанию)
@@ -6828,10 +6828,10 @@ except Exception:
 #  ЛОГИРОВАНИЕ ОШИБОК — чтобы "тихие" исключения не терялись
 # ═══════════════════════════════════════════════════════════════════════
 
-_ERROR_LOG_PATH = Path(__file__).parent / "mimotui_error.log"
+_ERROR_LOG_PATH = Path(__file__).parent / "error.log"
 
 def log_error(context: str, exc: Exception):
-    """Пишет исключение в mimotui_error.log вместо тихого проглатывания."""
+    """Пишет исключение в error.log вместо тихого проглатывания."""
     try:
         import traceback
         with open(_ERROR_LOG_PATH, "a", encoding="utf-8") as f:
@@ -7002,6 +7002,11 @@ def _hash_md5(text: str) -> str:
 
 def _hash_int(seed: str, mod: int) -> int:
     return int(_hash_md5(seed)[:12], 16) % mod if mod > 0 else 0
+
+# ═══════════════════════════════════════════════════════════════════════
+#  ЗАГРУЗКА АГЕНТА
+# ═══════════════════════════════════════════════════════════════════════
+
 # ═══════════════════════════════════════════════════════════════════════
 #  МОДЕЛЬ СООБЩЕНИЯ
 # ═══════════════════════════════════════════════════════════════════════
@@ -7057,7 +7062,7 @@ class ChatMessage:
 #  ПЕРСИСТЕНТНОСТЬ
 # ═══════════════════════════════════════════════════════════════════════
 
-SESSION_FILE = Path.home() / ".mimo_tui_session.json"
+SESSION_FILE = Path.home() / ".tui_session.json"
 
 def save_session(messages: List[ChatMessage], mode: str, user_prompt_name: str):
     try:
@@ -7262,9 +7267,6 @@ class SplashScreen(Widget):
         self._logo_timer = 0
         self._progress_target = 0.0
 
-    # SPDX-License-Identifier: MIT
-    # Copyright (c) 2026 ByteGhost. See LICENSE for details.
- 
     def on_mount(self):
         self._timer = self.set_interval(1 / 10, self._tick)
         self._anim_timer = self.set_interval(1 / 60, self._anim_tick)
@@ -9594,7 +9596,7 @@ def run_tui_agent():
     except Exception:
         import traceback
         err_text = traceback.format_exc()
-        log_path = Path(__file__).parent / "mimotui_error.log"
+        log_path = Path(__file__).parent / "error.log"
         try:
             with open(log_path, "a", encoding="utf-8") as f:
                 f.write(f"\n{'='*70}\n{time.ctime()}\n{err_text}\n")
