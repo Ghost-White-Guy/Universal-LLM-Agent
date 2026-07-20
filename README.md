@@ -183,7 +183,7 @@ flowchart TD
 Установка
 
 ```bash
-pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git
+pip install universal-llm-agent
 ```
 Запуск
 
@@ -789,7 +789,7 @@ From the code, the agent can:
 Installation
 
 ```bash
-pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git
+pip install universal-llm-agent
 ```
 
 Launch
