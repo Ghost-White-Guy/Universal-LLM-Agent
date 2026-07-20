@@ -7002,11 +7002,6 @@ def _hash_md5(text: str) -> str:
 
 def _hash_int(seed: str, mod: int) -> int:
     return int(_hash_md5(seed)[:12], 16) % mod if mod > 0 else 0
-
-# ═══════════════════════════════════════════════════════════════════════
-#  ЗАГРУЗКА АГЕНТА
-# ═══════════════════════════════════════════════════════════════════════
-
 # ═══════════════════════════════════════════════════════════════════════
 #  МОДЕЛЬ СООБЩЕНИЯ
 # ═══════════════════════════════════════════════════════════════════════
@@ -7267,6 +7262,9 @@ class SplashScreen(Widget):
         self._logo_timer = 0
         self._progress_target = 0.0
 
+    # SPDX-License-Identifier: MIT
+    # Copyright (c) 2026 ByteGhost. See LICENSE for details.
+ 
     def on_mount(self):
         self._timer = self.set_interval(1 / 10, self._tick)
         self._anim_timer = self.set_interval(1 / 60, self._anim_tick)
