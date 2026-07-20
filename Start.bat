@@ -81,7 +81,7 @@ if errorlevel 1 goto RUN_TUI
 :RUN_TUI
 cls
 echo Starting TUI mode...
-python unified_agent.py %BACKEND_ARG%
+python AI-agent.py %BACKEND_ARG%
 echo.
 pause
 goto MENU
@@ -89,7 +89,7 @@ goto MENU
 :RUN_CONSOLE
 cls
 echo Starting Console REPL mode...
-python unified_agent.py --console %BACKEND_ARG%
+python AI-agent.py --console %BACKEND_ARG%
 echo.
 pause
 goto MENU
