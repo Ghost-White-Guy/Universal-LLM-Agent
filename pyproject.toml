@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ai-agent = "AI-agent:main"
+ai-agent = "ai_agent:main"
 
 [tool.setuptools]
 py-modules = ["AI-agent"]
