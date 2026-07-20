@@ -42,7 +42,7 @@ https://github.com/user-attachments/assets/dd61a5bf-4409-4eeb-8210-2ba6bccc39cb
 
 Universal LLM Agent — это CLI/TUI-агент, который подключает языковую модель к инструментам операционной системы, файлам, сети, памяти, desktop-автоматизации, Docker-песочнице, мессенджерам (Telegram) и планировщикам задач.
 
-В версии **2.0** (файл `AI-agent.py`) ядро прежнего консольного агента (`local_agent.py`) объединено с графическим TUI на библиотеке [Textual](https://textual.textualize.io/). Это один Python-файл, который можно запустить в двух интерфейсах:
+В версии **2.0** (файл `ai_agent.py`) ядро прежнего консольного агента (`local_agent.py`) объединено с графическим TUI на библиотеке [Textual](https://textual.textualize.io/). Это один Python-файл, который можно запустить в двух интерфейсах:
 - **TUI** — полноэкранный интерфейс с чатом, сайдбаром, анимациями звёздного неба и плавным появлением сообщений;
 - **Console** — классический REPL, работающий только на стандартной библиотеке Python 3.11+.
 
@@ -76,7 +76,7 @@ Universal LLM Agent — это CLI/TUI-агент, который подключ
 
 Ядро проекта намеренно остаётся простым:
 
-- один Python-файл (`AI-agent.py`);
+- один Python-файл (`ai_agent.py`);
 - только стандартная библиотека в самом ядре (консольный режим не требует pip-пакетов);
 - прозрачный реестр инструментов (`ToolRegistry`);
 - понятный REPL + красивый TUI;
@@ -108,10 +108,10 @@ Universal LLM Agent — это CLI/TUI-агент, который подключ
 ## Режимы запуска
 
 ```bash
-python AI-agent.py            # TUI (Textual) — режим по умолчанию
-python AI-agent.py --console  # Консольный REPL-режим
-python AI-agent.py --console --backend ollama   # Консоль + пресет бэкенда
-python AI-agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
+python ai_agent.py            # TUI (Textual) — режим по умолчанию
+python ai_agent.py --console  # Консольный REPL-режим
+python ai_agent.py --console --backend ollama   # Консоль + пресет бэкенда
+python ai_agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
 ```
 
 | Режим | Зависимости | Назначение |
@@ -229,8 +229,8 @@ pip install textual rich pyperclip psutil Pillow
 4. Запустите агента
 
 ```bash
-python AI-agent.py            # TUI (по умолчанию)
-python AI-agent.py --console  # Консольный режим
+python ai_agent.py            # TUI (по умолчанию)
+python ai_agent.py --console  # Консольный режим
 ```
 </details>
 
@@ -495,9 +495,9 @@ python AI-agent.py --console  # Консольный режим
 
 Windows-лаунчер: Python + зависимости + автодетект бэкенда + меню.
 
-### `AI-agent.py`
+### `ai_agent.py`
 
-Единый файл: ядро + TUI. Запуск `python AI-agent.py` или с `--console`.
+Единый файл: ядро + TUI. Запуск `python ai_agent.py` или с `--console`.
 
 ---
 
@@ -624,7 +624,7 @@ https://github.com/user-attachments/assets/dd61a5bf-4409-4eeb-8210-2ba6bccc39cb
 
 Universal LLM Agent is a lightweight CLI/TUI agent that connects an LLM to real tools: files, shell, Python, Docker sandbox, HTTP, Telegram, Windows desktop automation, and more.
 
-In version **2.0** (`AI-agent.py`) the core of the former console agent (`local_agent.py`) is merged with a Textual-based TUI. It is a single Python file that can run in two interfaces:
+In version **2.0** (`ai_agent.py`) the core of the former console agent (`local_agent.py`) is merged with a Textual-based TUI. It is a single Python file that can run in two interfaces:
 - **TUI** — full-screen chat with sidebar, starfield animations, smooth message arrival;
 - **Console** — classic REPL working on stdlib Python 3.11+ only.
 
@@ -658,7 +658,7 @@ Key feature: it works in two worlds at once:
 
 The core stays deliberately simple:
 
-- one Python file (`AI-agent.py`);
+- one Python file (`ai_agent.py`);
 - standard library only in the core (console mode needs no pip packages);
 - a transparent tool registry (`ToolRegistry`);
 - a straightforward REPL + a beautiful TUI;
@@ -690,10 +690,10 @@ The agent can:
 ## Launch modes
 
 ```bash
-python AI-agent.py            # TUI (Textual) — default
-python AI-agent.py --console  # Console REPL mode
-python AI-agent.py --console --backend ollama   # Console + backend preset
-python AI-agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
+python ai_agent.py            # TUI (Textual) — default
+python ai_agent.py --console  # Console REPL mode
+python ai_agent.py --console --backend ollama   # Console + backend preset
+python ai_agent.py --console --model qwen2.5:7b --base-url http://localhost:11434/v1
 ```
 
 | Mode | Dependencies | Purpose |
@@ -809,8 +809,8 @@ pip install textual rich pyperclip psutil Pillow
 
 4. Start the agent
 ```bash
-python AI-agent.py            # TUI (default)
-python AI-agent.py --console  # Console mode
+python ai_agent.py            # TUI (default)
+python ai_agent.py --console  # Console mode
 ```
 </details>
 
@@ -1078,9 +1078,9 @@ The project exposes **110+ tools**. They are grouped below so the purpose of eac
 
 Windows launcher: Python + deps + backend autodetect + menu.
 
-### `AI-agent.py`
+### `ai_agent.py`
 
-Single file: core + TUI. Run `python AI-agent.py` or with `--console`.
+Single file: core + TUI. Run `python ai_agent.py` or with `--console`.
 
 ---
 
