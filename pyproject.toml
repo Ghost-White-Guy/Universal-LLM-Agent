@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "universal-llm-agent"
+version = "2.0.0"
+description = "Lightweight CLI + TUI agent for local and cloud LLMs with real tool calling"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "ByteGhost", email = "byteghosthelper@gmail.com"}]
+license = {text = "MIT"}
+dependencies = [
+    "textual>=0.50.0",
+    "rich>=13.0.0",
+    "pyperclip>=1.8.0",
+    "psutil>=5.9.0",
+    "Pillow>=10.0.0",
+    "keyring>=24.0.0",           # для secret_manage
+    "websocket-client>=1.5.0",  # для websocket_manage
+    "pyautogui>=0.9.50",        # для gui_manage
+]
+
+[project.scripts]
+ai-agent = "AI-agent:main"
+
+[tool.setuptools]
+py-modules = ["AI-agent"]
