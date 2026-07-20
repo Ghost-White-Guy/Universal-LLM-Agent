@@ -12,9 +12,8 @@
   <img src="https://img.shields.io/badge/Tools-100%2B-orange?style=for-the-badge" alt="Tools">
   <img src="https://img.shields.io/badge/Core-Single%20file-cyan?style=for-the-badge" alt="Single file">
   <img src="https://img.shields.io/badge/TUI-Textual-9cf?style=for-the-badge" alt="TUI">
+  <img src="https://img.shields.io/pypi/v/universal-llm-agent?style=for-the-badge&color=3776AB&logo=pypi&logoColor=white" alt="PyPI version">
 </p>
-
-[![PyPI version](https://badge.fury.io/py/universal-llm-agent.svg)](https://pypi.org/project/universal-llm-agent/)
 
 <p align="center">
   <a href="#-русская-версия">Русский</a> · <a href="#-english-version">English</a>
@@ -632,9 +631,8 @@ https://github.com/user-attachments/assets/dd61a5bf-4409-4eeb-8210-2ba6bccc39cb
   <img src="https://img.shields.io/badge/Tools-100%2B-orange?style=for-the-badge" alt="Tools">
   <img src="https://img.shields.io/badge/Core-Single%20file-cyan?style=for-the-badge" alt="Single file">
   <img src="https://img.shields.io/badge/TUI-Textual-9cf?style=for-the-badge" alt="TUI">
+  <img src="https://img.shields.io/pypi/v/universal-llm-agent?style=for-the-badge&color=3776AB&logo=pypi&logoColor=white" alt="PyPI version">
 </p>
-
-[![PyPI version](https://badge.fury.io/py/universal-llm-agent.svg)](https://pypi.org/project/universal-llm-agent/)
 
 > [!IMPORTANT]
 > The project is under active development. Some features are already working and useful, but the whole stack does not promise full completeness, identical stability across all platforms, or identical behavior across all models and backends.
