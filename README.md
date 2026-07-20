@@ -181,13 +181,13 @@ flowchart TD
 Установка
 
 ```bash
-`pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git`
+pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git
 ```
 Запуск
 
 ```bash
-`ai-agent`           # TUI (по умолчанию)
-`ai-agent --console` # Консольный режим
+ai-agent           # TUI (по умолчанию)
+ai-agent --console # Консольный режим
 ```
 `Последующий запуск может быть в любом месте в cmd`
 
