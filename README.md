@@ -1,7 +1,5 @@
 <img width="915" height="150" alt="623754555-210c686a-1824-490c-98f9-dbf3cb152d3d" src="https://github.com/user-attachments/assets/b4cbe09c-d3fb-4788-a6d2-e301c6500af5" />
 
-
-
 <p align="center">
   <strong>Лёгкий CLI + TUI агент для локальных и облачных LLM с реальным tool calling</strong><br>
   Один Python-файл • Минимум зависимостей • Native + prompt-based режимы • Windows / Linux / Termux • Красивый TUI на Textual
@@ -177,6 +175,21 @@ flowchart TD
 ---
 
 ## Установка и запуск
+
+### Быстрый вариант
+
+Установка
+
+```bash
+`pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git`
+```
+Запуск
+
+```bash
+`ai-agent`           # TUI (по умолчанию)
+`ai-agent --console` # Консольный режим
+```
+`Последующий запуск может быть в любом месте в cmd`
 
 ### Windows
 
@@ -759,6 +772,22 @@ From the code, the agent can:
 ---
 
 ## Installation and launch
+
+### Quick Start
+
+Installation
+
+```bash
+pip install git+https://github.com/Ghost-White-Guy/Universal-LLM-Agent.git
+```
+
+Launch
+
+```bash
+ai-agent           # TUI (default)
+ai-agent --console # Console mode
+```
+`Subsequent launches can be performed from any location in cmd.`
 
 ### Windows
 
